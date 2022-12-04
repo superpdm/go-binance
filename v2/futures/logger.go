@@ -2,4 +2,4 @@ package futures
 
 import "log"
 
-var Logger *log.Logger
+var Logger = log.Default()
