@@ -14,6 +14,8 @@ var (
 	BaseCombinedMainURL    = "wss://stream.binance.com:9443/stream?streams="
 	BaseCombinedTestnetURL = "wss://testnet.binance.vision/stream?streams="
 
+	MarginBaseWsMainURL = "wss://margin-stream.binance.com/ws"
+
 	// WebsocketTimeout is an interval for sending ping/pong messages if WebsocketKeepalive is enabled
 	WebsocketTimeout = time.Second * 60
 	// WebsocketKeepalive enables sending ping/pong messages to check the connection stability
@@ -26,6 +28,10 @@ func getWsEndpoint() string {
 		return BaseWsTestnetURL
 	}
 	return BaseWsMainURL
+}
+
+func getMarginWsEndpoint() string {
+	return MarginBaseWsMainURL
 }
 
 // getCombinedEndpoint return the base endpoint of the combined stream according the UseTestnet flag
@@ -619,6 +625,68 @@ func WsUserDataServe(listenKey string, handler WsUserDataHandler, errHandler Err
 			}
 		case UserDataEventTypeListStatus:
 			err = json.Unmarshal(message, &event.OCOUpdate)
+			if err != nil {
+				errHandler(err)
+				return
+			}
+		}
+
+		handler(event)
+	}
+	return wsServe(cfg, wsHandler, errHandler)
+}
+
+// WsMarginEvent define user data event
+type WsMarginEvent struct {
+	Event           MarginEventType `json:"e"`
+	Time            int64           `json:"E"`
+	LiabilityChange WsMarginLiabilityChange
+	MarginCall      WsMarginCall
+}
+
+type WsMarginLiabilityChange struct {
+	Asset    string `json:"a"`
+	Type     string `json:"t"`
+	Borrowed string `json:"p"`
+	Interest string `json:"i"`
+}
+
+type WsMarginCall struct {
+	LiquidityBar string `json:"l"`
+	State        string `json:"s"`
+}
+
+// WsMarginHandler handle WsMarginEvent
+type WsMarginHandler func(event *WsMarginEvent)
+
+// WsMarginServe serve user data handler with listen key
+func WsMarginServe(listenKey string, handler WsMarginHandler, errHandler ErrHandler) (doneC, stopC chan struct{}, err error) {
+	endpoint := fmt.Sprintf("%s/%s", getMarginWsEndpoint(), listenKey)
+	cfg := newWsConfig(endpoint)
+	wsHandler := func(message []byte) {
+		j, err := newJSON(message)
+		if err != nil {
+			errHandler(err)
+			return
+		}
+
+		event := new(WsMarginEvent)
+
+		err = json.Unmarshal(message, event)
+		if err != nil {
+			errHandler(err)
+			return
+		}
+
+		switch MarginEventType(j.Get("e").MustString()) {
+		case MarginEventTypeLiabilityChange:
+			err = json.Unmarshal(message, &event.LiabilityChange)
+			if err != nil {
+				errHandler(err)
+				return
+			}
+		case MarginEventTypeCall:
+			err = json.Unmarshal(message, &event.MarginCall)
 			if err != nil {
 				errHandler(err)
 				return

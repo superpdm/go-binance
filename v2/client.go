@@ -50,6 +50,9 @@ type SymbolFilterType string
 // UserDataEventType define spot user data event type
 type UserDataEventType string
 
+// MarginEventType define margin event type
+type MarginEventType string
+
 // MarginTransferType define margin transfer type
 type MarginTransferType int
 
@@ -169,6 +172,9 @@ const (
 	UserDataEventTypeBalanceUpdate           UserDataEventType = "balanceUpdate"
 	UserDataEventTypeExecutionReport         UserDataEventType = "executionReport"
 	UserDataEventTypeListStatus              UserDataEventType = "ListStatus"
+
+	MarginEventTypeLiabilityChange MarginEventType = "USER_LIABILITY_CHANGE"
+	MarginEventTypeCall            MarginEventType = "MARGIN_LEVEL_STATUS_CHANGE"
 
 	MarginTransferTypeToMargin MarginTransferType = 1
 	MarginTransferTypeToMain   MarginTransferType = 2
@@ -638,6 +644,21 @@ func (c *Client) NewKeepaliveUserStreamService() *KeepaliveUserStreamService {
 // NewCloseUserStreamService init closing user stream service
 func (c *Client) NewCloseUserStreamService() *CloseUserStreamService {
 	return &CloseUserStreamService{c: c}
+}
+
+// NewStartMarginStreamService init starting margin stream service
+func (c *Client) NewStartMarginStreamService() *StartMarginStreamService {
+	return &StartMarginStreamService{c: c}
+}
+
+// NewKeepaliveMarginStreamService init keep alive margin stream service
+func (c *Client) NewKeepaliveMarginStreamService() *KeepaliveMarginStreamService {
+	return &KeepaliveMarginStreamService{c: c}
+}
+
+// NewCloseMarginStreamService init closing margin stream service
+func (c *Client) NewCloseMarginStreamService() *CloseMarginStreamService {
+	return &CloseMarginStreamService{c: c}
 }
 
 // NewExchangeInfoService init exchange info service
