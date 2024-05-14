@@ -7,20 +7,21 @@ import (
 
 // CreateMarginOrderService create order
 type CreateMarginOrderService struct {
-	c                *Client
-	symbol           string
-	side             SideType
-	orderType        OrderType
-	quantity         *string
-	quoteOrderQty    *string
-	price            *string
-	stopPrice        *string
-	newClientOrderID *string
-	icebergQuantity  *string
-	newOrderRespType *NewOrderRespType
-	sideEffectType   *SideEffectType
-	timeInForce      *TimeInForceType
-	isIsolated       *bool
+	c                 *Client
+	symbol            string
+	side              SideType
+	orderType         OrderType
+	quantity          *string
+	quoteOrderQty     *string
+	price             *string
+	stopPrice         *string
+	newClientOrderID  *string
+	icebergQuantity   *string
+	newOrderRespType  *NewOrderRespType
+	sideEffectType    *SideEffectType
+	timeInForce       *TimeInForceType
+	isIsolated        *bool
+	autoRepayAtCancel *bool
 }
 
 // Symbol set symbol
@@ -32,6 +33,12 @@ func (s *CreateMarginOrderService) Symbol(symbol string) *CreateMarginOrderServi
 // IsIsolated sets the order to isolated margin
 func (s *CreateMarginOrderService) IsIsolated(isIsolated bool) *CreateMarginOrderService {
 	s.isIsolated = &isIsolated
+	return s
+}
+
+// AutoRepayAtCancel sets the order to isolated margin
+func (s *CreateMarginOrderService) AutoRepayAtCancel(autoRepayAtCancel bool) *CreateMarginOrderService {
+	s.autoRepayAtCancel = &autoRepayAtCancel
 	return s
 }
 
@@ -124,6 +131,13 @@ func (s *CreateMarginOrderService) Do(ctx context.Context, opts ...RequestOption
 			m["isIsolated"] = "TRUE"
 		} else {
 			m["isIsolated"] = "FALSE"
+		}
+	}
+	if s.autoRepayAtCancel != nil {
+		if *s.autoRepayAtCancel {
+			m["autoRepayAtCancel"] = "TRUE"
+		} else {
+			m["autoRepayAtCancel"] = "FALSE"
 		}
 	}
 	if s.timeInForce != nil {
