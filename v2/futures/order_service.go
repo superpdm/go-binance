@@ -820,11 +820,9 @@ type CreateBatchOrdersService struct {
 type CreateBatchOrdersResponse struct {
 	// Total number of messages in the response
 	N int
-	// List of orders which were placed successfully which can have a length between 0 and N
+	// List of orders which were placed successfully or nil if failed
 	Orders []*Order
-	// List of errors of length N, where each item corresponds to a nil value if
-	// the order from that specific index was placed succeessfully OR an non-nil *APIError if there was an error with
-	// the order at that index
+	// List of errors of length N, where each item corresponds to a nil value if successful
 	Errors []error
 }
 
@@ -832,6 +830,7 @@ func newCreateBatchOrdersResponse(n int) *CreateBatchOrdersResponse {
 	return &CreateBatchOrdersResponse{
 		N:      n,
 		Errors: make([]error, n),
+		Orders: make([]*Order, n),
 	}
 }
 
@@ -933,7 +932,7 @@ func (s *CreateBatchOrdersService) Do(ctx context.Context, opts ...RequestOption
 			return nil, err
 		}
 
-		batchCreateOrdersResponse.Orders = append(batchCreateOrdersResponse.Orders, o)
+		batchCreateOrdersResponse.Orders[i] = o
 	}
 
 	return batchCreateOrdersResponse, nil

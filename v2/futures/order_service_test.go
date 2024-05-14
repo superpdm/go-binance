@@ -664,6 +664,7 @@ func (s *orderServiceTestSuite) TestCreateBatchOrders() {
 	e := &CreateBatchOrdersResponse{
 		N: 3,
 		Orders: []*Order{
+			nil,
 			{
 				Symbol:                  "BTCUSDT",
 				OrderID:                 22542179,
@@ -693,6 +694,7 @@ func (s *orderServiceTestSuite) TestCreateBatchOrders() {
 				SelfTradePreventionMode: "NONE",
 				GoodTillDate:            0,
 			},
+			nil,
 		},
 		Errors: []error{
 			&common.APIError{
