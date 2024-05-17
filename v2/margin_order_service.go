@@ -479,6 +479,33 @@ type CreateMarginOCOService struct {
 	sideEffectType       *SideEffectType
 }
 
+// CancelMarginOpenOrdersService cancel all open orders
+type CancelMarginOpenOrdersService struct {
+	c      *Client
+	symbol string
+}
+
+// Symbol set symbol
+func (s *CancelMarginOpenOrdersService) Symbol(symbol string) *CancelMarginOpenOrdersService {
+	s.symbol = symbol
+	return s
+}
+
+// Do send request
+func (s *CancelMarginOpenOrdersService) Do(ctx context.Context, opts ...RequestOption) (err error) {
+	r := &request{
+		method:   http.MethodDelete,
+		endpoint: "/sapi/v1/margin/openOrders",
+		secType:  secTypeSigned,
+	}
+	r.setFormParam("symbol", s.symbol)
+	_, err = s.c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Symbol set symbol
 func (s *CreateMarginOCOService) Symbol(symbol string) *CreateMarginOCOService {
 	s.symbol = symbol
