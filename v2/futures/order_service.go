@@ -189,6 +189,7 @@ func (s *CreateOrderService) createOrder(ctx context.Context, endpoint string, o
 	}
 	if s.closePosition != nil {
 		m["priceMatch"] = *s.priceMatch
+
 	}
 	r.setFormParams(m)
 	data, header, err = s.c.callAPI(ctx, r, opts...)
