@@ -48,6 +48,9 @@ type SymbolFilterType string
 // UserDataEventType define spot user data event type
 type UserDataEventType string
 
+// MarginEventType define margin event type
+type MarginEventType string
+
 // MarginTransferType define margin transfer type
 type MarginTransferType int
 
@@ -177,6 +180,9 @@ const (
 	UserDataEventTypeExecutionReport         UserDataEventType = "executionReport"
 	UserDataEventTypeListStatus              UserDataEventType = "ListStatus"
 
+	MarginEventTypeLiabilityChange MarginEventType = "USER_LIABILITY_CHANGE"
+	MarginEventTypeCall            MarginEventType = "MARGIN_LEVEL_STATUS_CHANGE"
+
 	MarginTransferTypeToMargin MarginTransferType = 1
 	MarginTransferTypeToMain   MarginTransferType = 2
 
@@ -195,9 +201,10 @@ const (
 	FuturesTransferStatusTypeConfirmed FuturesTransferStatusType = "CONFIRMED"
 	FuturesTransferStatusTypeFailed    FuturesTransferStatusType = "FAILED"
 
-	SideEffectTypeNoSideEffect SideEffectType = "NO_SIDE_EFFECT"
-	SideEffectTypeMarginBuy    SideEffectType = "MARGIN_BUY"
-	SideEffectTypeAutoRepay    SideEffectType = "AUTO_REPAY"
+	SideEffectTypeNoSideEffect    SideEffectType = "NO_SIDE_EFFECT"
+	SideEffectTypeMarginBuy       SideEffectType = "MARGIN_BUY"
+	SideEffectTypeAutoRepay       SideEffectType = "AUTO_REPAY"
+	SideEffectTypeAutoBorrowRepay SideEffectType = "AUTO_BORROW_REPAY"
 
 	TransactionTypeDeposit  TransactionType = "0"
 	TransactionTypeWithdraw TransactionType = "1"
@@ -707,6 +714,21 @@ func (c *Client) NewCloseUserStreamService() *CloseUserStreamService {
 	return &CloseUserStreamService{c: c}
 }
 
+// NewStartMarginStreamService init starting margin stream service
+func (c *Client) NewStartMarginStreamService() *StartMarginStreamService {
+	return &StartMarginStreamService{c: c}
+}
+
+// NewKeepaliveMarginStreamService init keep alive margin stream service
+func (c *Client) NewKeepaliveMarginStreamService() *KeepaliveMarginStreamService {
+	return &KeepaliveMarginStreamService{c: c}
+}
+
+// NewCloseMarginStreamService init closing margin stream service
+func (c *Client) NewCloseMarginStreamService() *CloseMarginStreamService {
+	return &CloseMarginStreamService{c: c}
+}
+
 // NewExchangeInfoService init exchange info service
 func (c *Client) NewExchangeInfoService() *ExchangeInfoService {
 	return &ExchangeInfoService{c: c}
@@ -750,6 +772,11 @@ func (c *Client) NewCreateMarginOrderService() *CreateMarginOrderService {
 // NewCancelMarginOrderService init cancel order service
 func (c *Client) NewCancelMarginOrderService() *CancelMarginOrderService {
 	return &CancelMarginOrderService{c: c}
+}
+
+// NewCancelMarginOpenOrdersService init cancel order service
+func (c *Client) NewCancelMarginOpenOrdersService() *CancelMarginOpenOrdersService {
+	return &CancelMarginOpenOrdersService{c: c}
 }
 
 // NewCreateMarginOCOService init creating margin order service
