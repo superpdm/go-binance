@@ -187,7 +187,7 @@ func (s *CreateOrderService) createOrder(ctx context.Context, endpoint string, o
 	if s.closePosition != nil {
 		m["closePosition"] = *s.closePosition
 	}
-	if s.closePosition != nil {
+	if s.priceMatch != nil {
 		m["priceMatch"] = *s.priceMatch
 	}
 	r.setFormParams(m)
