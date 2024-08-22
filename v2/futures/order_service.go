@@ -31,6 +31,7 @@ type CreateOrderService struct {
 	priceProtect     *string
 	newOrderRespType NewOrderRespType
 	closePosition    *string
+	priceMatch       *string
 }
 
 // Symbol set symbol
@@ -132,6 +133,11 @@ func (s *CreateOrderService) ClosePosition(closePosition bool) *CreateOrderServi
 	return s
 }
 
+func (s *CreateOrderService) PriceMatch(priceMatch string) *CreateOrderService {
+	s.priceMatch = &priceMatch
+	return s
+}
+
 func (s *CreateOrderService) createOrder(ctx context.Context, endpoint string, opts ...RequestOption) (data []byte, header *http.Header, err error) {
 
 	r := &request{
@@ -180,6 +186,9 @@ func (s *CreateOrderService) createOrder(ctx context.Context, endpoint string, o
 	}
 	if s.closePosition != nil {
 		m["closePosition"] = *s.closePosition
+	}
+	if s.priceMatch != nil {
+		m["priceMatch"] = *s.priceMatch
 	}
 	r.setFormParams(m)
 	data, header, err = s.c.callAPI(ctx, r, opts...)
@@ -892,6 +901,9 @@ func (s *CreateBatchOrdersService) Do(ctx context.Context, opts ...RequestOption
 		}
 		if order.closePosition != nil {
 			m["closePosition"] = *order.closePosition
+		}
+		if order.priceMatch != nil {
+			m["priceMatch"] = *order.priceMatch
 		}
 		orders = append(orders, m)
 	}
