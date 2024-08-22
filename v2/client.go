@@ -1318,3 +1318,19 @@ func (c *Client) NewSubAccountTransactionStatisticsService() *SubAccountTransact
 func (c *Client) NewSubAccountFuturesAccountV2Service() *SubAccountFuturesAccountV2Service {
 	return &SubAccountFuturesAccountV2Service{c: c}
 }
+
+func (c *Client) NewCreateMarginApiKeyService() *CreateMarginApiKeyService {
+	return &CreateMarginApiKeyService{c: c}
+}
+func (c *Client) NewDeleteMarginApiKeyService() *DeleteMarginApiKeyService {
+	return &DeleteMarginApiKeyService{c: c}
+}
+func (c *Client) NewListMarginApiKeyService() *ListMarginApiKeyService {
+	return &ListMarginApiKeyService{c: c}
+}
+func (c *Client) NewQueryMarginApiKeyService() *QueryMarginApiKeyService {
+	return &QueryMarginApiKeyService{c: c}
+}
+func (c *Client) NewMarginApiKeyEditIpService() *MarginApiKeyEditIpService {
+	return &MarginApiKeyEditIpService{c: c}
+}

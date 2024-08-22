@@ -54,11 +54,11 @@ func (s *CreateMarginApiKeyService) Do(ctx context.Context, opts ...RequestOptio
 	}
 	r.setFormParams(m)
 
-	res = new(CreateMarginApiKeyResponse)
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
 	}
+	res = new(CreateMarginApiKeyResponse)
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
@@ -217,7 +217,7 @@ func (s *ListMarginApiKeyService) Do(ctx context.Context, opts ...RequestOption)
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(data, res)
+	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
