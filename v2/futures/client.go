@@ -39,6 +39,10 @@ type OrderExecutionType string
 // OrderStatusType define order status type
 type OrderStatusType string
 
+// PriceMatchType define priceMatch type
+// Can't be passed together with price
+type PriceMatchType string
+
 // SymbolType define symbol type
 type SymbolType string
 
@@ -117,6 +121,16 @@ const (
 	OrderStatusTypeNewInsurance    OrderStatusType = "NEW_INSURANCE"
 	OrderStatusTypeNewADL          OrderStatusType = "NEW_ADL"
 
+	PriceMatchTypeOpponent   PriceMatchType = "OPPONENT"
+	PriceMatchTypeOpponent5  PriceMatchType = "OPPONENT_5"
+	PriceMatchTypeOpponent10 PriceMatchType = "OPPONENT_10"
+	PriceMatchTypeOpponent20 PriceMatchType = "OPPONENT_20"
+	PriceMatchTypeQueue      PriceMatchType = "QUEUE"
+	PriceMatchTypeQueue5     PriceMatchType = "QUEUE_5"
+	PriceMatchTypeQueue10    PriceMatchType = "QUEUE_10"
+	PriceMatchTypeQueue20    PriceMatchType = "QUEUE_20"
+	PriceMatchTypeNone       PriceMatchType = "NONE"
+
 	SymbolTypeFuture SymbolType = "FUTURE"
 
 	WorkingTypeMarkPrice     WorkingType = "MARK_PRICE"
@@ -152,6 +166,7 @@ const (
 	UserDataEventTypeAccountUpdate       UserDataEventType = "ACCOUNT_UPDATE"
 	UserDataEventTypeOrderTradeUpdate    UserDataEventType = "ORDER_TRADE_UPDATE"
 	UserDataEventTypeAccountConfigUpdate UserDataEventType = "ACCOUNT_CONFIG_UPDATE"
+	UserDataEventTypeTradeLite           UserDataEventType = "TRADE_LITE"
 
 	UserDataEventReasonTypeDeposit             UserDataEventReasonType = "DEPOSIT"
 	UserDataEventReasonTypeWithdraw            UserDataEventReasonType = "WITHDRAW"
@@ -446,6 +461,11 @@ func (c *Client) NewCreateOrderService() *CreateOrderService {
 	return &CreateOrderService{c: c}
 }
 
+// NewModifyOrderService init creating order service
+func (c *Client) NewModifyOrderService() *ModifyOrderService {
+	return &ModifyOrderService{c: c}
+}
+
 // NewCreateBatchOrdersService init creating batch order service
 func (c *Client) NewCreateBatchOrdersService() *CreateBatchOrdersService {
 	return &CreateBatchOrdersService{c: c}
@@ -670,4 +690,32 @@ func (c *Client) NewConstituentsService() *ConstituentsService {
 
 func (c *Client) NewLvtKlinesService() *LvtKlinesService {
 	return &LvtKlinesService{c: c}
+}
+
+func (c *Client) NewGetFeeBurnService() *GetFeeBurnService {
+	return &GetFeeBurnService{c: c}
+}
+
+func (c *Client) NewFeeBurnService() *FeeBurnService {
+	return &FeeBurnService{c: c}
+}
+
+// NewListConvertAssetsService init list convert assets service
+func (c *Client) NewListConvertExchangeInfoService() *ListConvertExchangeInfoService {
+	return &ListConvertExchangeInfoService{c: c}
+}
+
+// NewCreateConvertQuoteService init create convert quote service
+func (c *Client) NewCreateConvertQuoteService() *CreateConvertQuoteService {
+	return &CreateConvertQuoteService{c: c}
+}
+
+// NewCreateConvertService init accept convert quote service
+func (c *Client) NewConvertAcceptService() *ConvertAcceptService {
+	return &ConvertAcceptService{c: c}
+}
+
+// NewGetConvertStatusService init get convert status service
+func (c *Client) NewGetConvertStatusService() *ConvertStatusService {
+	return &ConvertStatusService{c: c}
 }

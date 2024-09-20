@@ -112,6 +112,18 @@ type UserUniversalTransferType string
 // UserUniversalTransferStatus define the user universal transfer status
 type UserUniversalTransferStatusType string
 
+// FuturesOrderBookHistoryDataType define the futures order book history data types
+type FuturesOrderBookHistoryDataType string
+
+// FutureAlgoType define future algo types
+type FuturesAlgoType string
+
+// FutureAlgoUrgencyType define future algo urgency type
+type FuturesAlgoUrgencyType string
+
+// FutureAlgoOrderStatusType define future algo order status
+type FuturesAlgoOrderStatusType string
+
 // Endpoints
 var (
 	BaseAPIMainURL    = "https://api.binance.com"
@@ -186,8 +198,10 @@ const (
 	MarginTransferTypeToMargin MarginTransferType = 1
 	MarginTransferTypeToMain   MarginTransferType = 2
 
-	FuturesTransferTypeToFutures FuturesTransferType = 1
-	FuturesTransferTypeToMain    FuturesTransferType = 2
+	FuturesTransferTypeToFutures       FuturesTransferType = 1
+	FuturesTransferTypeToMain          FuturesTransferType = 2
+	FuturesTransferTypeToFuturesCM     FuturesTransferType = 3
+	FuturesTransferTypeFuturesCMToMain FuturesTransferType = 4
 
 	MarginLoanStatusTypePending   MarginLoanStatusType = "PENDING"
 	MarginLoanStatusTypeConfirmed MarginLoanStatusType = "CONFIRMED"
@@ -294,6 +308,20 @@ const (
 	UserUniversalTransferStatusTypePending   UserUniversalTransferStatusType = "PENDING"
 	UserUniversalTransferStatusTypeConfirmed UserUniversalTransferStatusType = "CONFIRMED"
 	UserUniversalTransferStatusTypeFailed    UserUniversalTransferStatusType = "FAILED"
+
+	FuturesOrderBookHistoryDataTypeTDepth FuturesOrderBookHistoryDataType = "T_DEPTH"
+	FuturesOrderBookHistoryDataTypeSDepth FuturesOrderBookHistoryDataType = "S_DEPTH"
+
+	FuturesAlgoTypeVp   FuturesAlgoType = "VP"
+	FuturesAlgoTypeTwap FuturesAlgoType = "TWAP"
+
+	FuturesAlgoUrgencyTypeLow    FuturesAlgoUrgencyType = "LOW"
+	FuturesAlgoUrgencyTypeMedium FuturesAlgoUrgencyType = "MEDIUM"
+	FuturesAlgoUrgencyTypeHigh   FuturesAlgoUrgencyType = "HIGH"
+
+	FuturesAlgoOrderStatusTypeWorking   FuturesAlgoOrderStatusType = "WORKING"
+	FuturesAlgoOrderStatusTypeFinished  FuturesAlgoOrderStatusType = "FINISHED"
+	FuturesAlgoOrderStatusTypeCancelled FuturesAlgoOrderStatusType = "CANCELLED"
 )
 
 func currentTimestamp() int64 {
@@ -1333,4 +1361,39 @@ func (c *Client) NewQueryMarginApiKeyService() *QueryMarginApiKeyService {
 }
 func (c *Client) NewMarginApiKeyEditIpService() *MarginApiKeyEditIpService {
 	return &MarginApiKeyEditIpService{c: c}
+}
+
+// Futures order book history service
+func (c *Client) NewFuturesOrderBookHistoryService() *FuturesOrderBookHistoryService {
+	return &FuturesOrderBookHistoryService{c: c}
+}
+
+// NewCreateFuturesAlgoVpOrderService create futures algo vp order
+func (c *Client) NewCreateFuturesAlgoVpOrderService() *CreateFuturesAlgoVpOrderService {
+	return &CreateFuturesAlgoVpOrderService{c: c}
+}
+
+// NewCreateFuturesAlgoTwapOrderService create futures algo twap order
+func (c *Client) NewCreateFuturesAlgoTwapOrderService() *CreateFuturesAlgoTwapOrderService {
+	return &CreateFuturesAlgoTwapOrderService{c: c}
+}
+
+// NewListOpenFuturesAlgoOrdersService list open futures algo orders
+func (c *Client) NewListOpenFuturesAlgoOrdersService() *ListOpenFuturesAlgoOrdersService {
+	return &ListOpenFuturesAlgoOrdersService{c: c}
+}
+
+// NewListHistoryFuturesAlgoOrdersService list history futures algo orders
+func (c *Client) NewListHistoryFuturesAlgoOrdersService() *ListHistoryFuturesAlgoOrdersService {
+	return &ListHistoryFuturesAlgoOrdersService{c: c}
+}
+
+// NewCancelFuturesAlgoOrderService cancel future algo order
+func (c *Client) NewCancelFuturesAlgoOrderService() *CancelFuturesAlgoOrderService {
+	return &CancelFuturesAlgoOrderService{c: c}
+}
+
+// NewGetFuturesAlgoSubOrdersService get futures algo sub orders
+func (c *Client) NewGetFuturesAlgoSubOrdersService() *GetFuturesAlgoSubOrdersService {
+	return &GetFuturesAlgoSubOrdersService{c: c}
 }
